@@ -48,8 +48,8 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       run: |
         ( sudo -E apt-get -qq update
-        sudo -E apt-get -qq install build-essential asciidoc binutils bzip2 curl patch libz-dev lib32gcc1 libc6-dev-i386 uglifyjs  \
-        p7zip p7zip-full msmtp texinfo clang flex g++ gawk gcc-multilib gettext libglib2.0-dev xmlto upx autoconf automake  libtool autopoint device-tree-compiler g++-multilib antlr3 gperf\
+        sudo -E apt-get -qq install build-essential asciidoc binutils bzip2 curl patch libz-dev libc6-dev-i386 uglifyjs  libucl \
+        p7zip p7zip-full msmtp texinfo clang flex g++ gawk gcc-multilib gettext libglib2.0-dev xmlto upx autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf\
         git libncurses5-dev libssl-dev python3-distutils rsync unzip zlib1g-dev swig libpython3-dev aria2 jq subversion qemu-utils ccache rename libelf-dev
         sudo -E apt-get -qq purge azure-cli ghc* zulu* hhvm llvm* firefox powershell openjdk* dotnet* google* mysql* php* android*
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
@@ -96,7 +96,8 @@ jobs:
         cd openwrt
         ./scripts/feeds update -a && ./scripts/feeds install -a
         cp -f feeds/smpackage/.github/diy/zzz-default-settings package/default-settings/files/zzz-default-settings
-        cp -f feeds/smpackage/.github/diy/banner package/base-files/files/etc/banner && make defconfig
+        cp -f feeds/smpackage/.github/diy/banner package/base-files/files/etc/banner 
+        rm -rf tools/upx && cp -Rf feeds/smpackage/upx tools/upx && make defconfig
      #   cp -Rf feeds/smpackage/.github/diy/files/* files
      #   rm -rf tools/upx && cp -Rf feeds/smpackage/upx tools/upx 
      #   cp -f feeds/smpackage/.github/diy/${{matrix.target}}.config .config && make defconfig
