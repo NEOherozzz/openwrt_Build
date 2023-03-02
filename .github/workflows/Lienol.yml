@@ -88,7 +88,7 @@ jobs:
         
     - name: 自定义配置 ${{matrix.target}}
       env:
-        CONFIG_FILE: '${{matrix.target}}.config'
+        CONFIG_FILE: '${{matrix.target}}_20230302.config'
       run: |
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x ./customize.sh && ./customize.sh
@@ -98,8 +98,8 @@ jobs:
         cp -f feeds/smpackage/.github/diy/zzz-default-settings package/default-settings/files/zzz-default-settings
         cp -f feeds/smpackage/.github/diy/banner package/base-files/files/etc/banner
         cp -Rf feeds/smpackage/.github/diy/files/* files
-        rm -rf tools/upx && cp -Rf feeds/smpackage/upx tools/upx
-        cp -f feeds/smpackage/.github/diy/${{matrix.target}}.config .config && make defconfig
+        rm -rf tools/upx && cp -Rf feeds/smpackage/upx tools/upx && make defconfig
+     #   cp -f feeds/smpackage/.github/diy/${{matrix.target}}.config .config && make defconfig
         
     - name: 下载包文件
       working-directory: ./openwrt
@@ -143,16 +143,16 @@ jobs:
         rm -rf sha256sums
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         
-    - name: 部署文件到服务器
-      uses: easingthemes/ssh-deploy@main
-      with:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        ARGS: "-avzr --exclude="
-        SOURCE: firmware/
-        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-        REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
-        REMOTE_USER: root
-        TARGET: "/www/wwwroot/${{ secrets.REMOTE_HOST }}/op/firmware/${{matrix.target}}/"         
+#     - name: 部署文件到服务器
+#       uses: easingthemes/ssh-deploy@main
+#       with:
+#         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+#         ARGS: "-avzr --exclude="
+#         SOURCE: firmware/
+#         REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+#         REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
+#         REMOTE_USER: root
+#         TARGET: "/www/wwwroot/${{ secrets.REMOTE_HOST }}/op/firmware/${{matrix.target}}/"         
       
     - name: 上传固件目录
       uses: actions/upload-artifact@main
