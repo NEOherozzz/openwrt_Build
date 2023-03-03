@@ -4,7 +4,7 @@
 # Author: kenzo
 #=================================================
 
-name: Lienol
+name: Lienol_raw
 
 on:
   repository_dispatch:
